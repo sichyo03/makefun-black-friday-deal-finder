@@ -45,7 +45,7 @@ export function verdict(deal) {
   else if (gap >= -10) band = "Routine sale";
   else band = "Thin discount";
   const why = lowest
-    ? `Source states a lowest-ever price. Discount ${off}% vs typical −${typical}% for ${deal.category}.`
+    ? `Price-history evidence states a lowest-ever price. Discount ${off}% vs typical −${typical}% for ${deal.category}.`
     : `Discount ${off}% vs typical −${typical}% for ${deal.category} (${gap >= 0 ? "+" : ""}${gap} pts).`;
   return { band, off, typical, gap, lowest, why };
 }

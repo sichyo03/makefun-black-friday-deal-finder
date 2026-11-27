@@ -9,7 +9,7 @@
 // screenshot script knows when to capture.
 
 import { deals, codes } from "./data.js";
-import { apply, counts, freshState, topDeals } from "./filters.js";
+import { apply, counts, freshState, isFiltered, topDeals } from "./filters.js";
 import { board, dealPage, missingPage } from "./views.js";
 
 const app = document.getElementById("app");
@@ -71,6 +71,18 @@ function refreshGrid() {
     tmp.innerHTML = board({ deals, shown, state, tally, top, codes });
     grid.innerHTML = tmp.querySelector("#grid").innerHTML;
     count.textContent = `Showing ${shown.length} of ${deals.length} deals`;
+    // Typing a search narrows the board too, so the Top 5 hero steps aside the same way
+    // a full render would drop it (and comes back when the search is cleared).
+    const hero = document.getElementById("hero");
+    if (hero) hero.style.display = isFiltered(state) ? "none" : "";
+    // The empty state's reset button is new markup, so bind it here too.
+    const reset = grid.querySelector('button[data-filter="reset"]');
+    if (reset) {
+      reset.addEventListener("click", () => {
+        state = freshState();
+        renderBoard();
+      });
+    }
   }
 }
 
@@ -80,7 +92,7 @@ function render() {
   if (match) {
     const found = deals.find((d) => d.id === decodeURIComponent(match[1]));
     document.title = `${found ? found.title : "Not found"} | DoorBuster Board`;
-    app.innerHTML = found ? dealPage(found) : missingPage();
+    app.innerHTML = found ? dealPage(found, deals) : missingPage();
   } else {
     document.title = "DoorBuster Board — Black Friday deals, checked today";
     state = stateFromHash(location.hash);

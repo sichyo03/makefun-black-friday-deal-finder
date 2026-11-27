@@ -9,6 +9,13 @@
 // source gave an end date. Store links are the store's own search for the exact product.
 
 const CHECKED = "2026-11-27T08:05:00Z";
+// A second read later the same morning (27 Nov) re-checked a sample of prices against store
+// pages and fresh roundups and added the deals marked RECHECKED below.
+const RECHECKED = "2026-11-27T08:06:00Z";
+// A third read on the afternoon of 27 Nov added the thin-store deals below (Target, Newegg,
+// Home Depot and LEGO direct each had only a handful of deals) and refreshed the LEGO Volvo
+// price from LEGO.com's own sale page, where Black Friday had deepened it to 40% off.
+const AFTERNOON = "2026-11-27T09:40:00Z";
 
 export const deals = [
   // ---- TVs & home theater ----
@@ -27,7 +34,7 @@ export const deals = [
   { id: "fire-tv-stick-4k-plus", title: "Amazon Fire TV Stick 4K Plus", store: "Amazon", category: "TVs & home theater", price: 29.99, was: 69.99, url: "https://www.amazon.com/s?k=Fire+TV+Stick+4K+Plus", checked: CHECKED, source: "iddeya Black Friday guide (checked 25 Nov)", note: "Usual price is Amazon's list price." },
 
   // ---- Audio ----
-  { id: "airpods-pro-3", title: "Apple AirPods Pro 3", store: "Walmart", category: "Audio", price: 149, was: 249, url: "https://www.walmart.com/search?q=Apple+AirPods+Pro+3", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov", alts: [
+  { id: "airpods-pro-3", title: "Apple AirPods Pro 3", store: "Walmart", category: "Audio", price: 149, was: 249, url: "https://www.walmart.com/search?q=Apple+AirPods+Pro+3", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov", note: "Record low price (MacRumors, 9to5Mac).", alts: [
     { store: "Amazon", price: 149, url: "https://www.amazon.com/s?k=Apple+AirPods+Pro+3" },
     { store: "Target", price: 149.99, url: "https://www.target.com/s?searchTerm=Apple+AirPods+Pro+3" },
   ] },
@@ -35,11 +42,11 @@ export const deals = [
   { id: "beats-360", title: "Beats 360 Headphones", store: "Amazon", category: "Audio", price: 249, was: 349, url: "https://www.amazon.com/s?k=Beats+360+Headphones", checked: CHECKED, source: "MacRumors Apple deals, 26 Nov", note: "First big discount tracked on this model (was about $20 off before).", alts: [
     { store: "Best Buy", price: 249, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Beats+360+Headphones" },
   ] },
-  { id: "beats-studio-pro", title: "Beats Studio Pro Headphones", store: "Walmart", category: "Audio", price: 99, was: 299, url: "https://www.walmart.com/search?q=Beats+Studio+Pro+Headphones", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
+  { id: "beats-studio-pro", title: "Beats Studio Pro Headphones", store: "Walmart", category: "Audio", price: 99, was: 299, url: "https://www.walmart.com/search?q=Beats+Studio+Pro+Headphones", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov", ends: "2026-11-29" },
   { id: "beats-solo-4", title: "Beats Solo 4 On-Ear Headphones", store: "Walmart", category: "Audio", price: 69, was: 199.99, url: "https://www.walmart.com/search?q=Beats+Solo+4+Headphones", checked: CHECKED, source: "Popular Science Walmart roundup", alts: [
     { store: "Target", price: 79.99, url: "https://www.target.com/s?searchTerm=Beats+Solo+4+Headphones" },
   ] },
-  { id: "sony-xm5", title: "Sony WH-1000XM5 Wireless Headphones", store: "Best Buy", category: "Audio", price: 169, was: 398, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Sony+WH-1000XM5", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
+  { id: "sony-xm5", title: "Sony WH-1000XM5 Wireless Headphones", store: "Best Buy", category: "Audio", price: 169, was: 398, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Sony+WH-1000XM5", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov", note: "All-time low price (HotHardware)." },
   { id: "bose-qc", title: "Bose QuietComfort Headphones", store: "Target", category: "Audio", price: 169.99, was: 359.99, url: "https://www.target.com/s?searchTerm=Bose+QuietComfort+Headphones", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
   { id: "jlab-go-air-pop", title: "JLab Go Air Pop True Wireless Earbuds", store: "Walmart", category: "Audio", price: 9.88, was: 26.99, url: "https://www.walmart.com/search?q=JLab+Go+Air+Pop+Earbuds", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "jlab-go-air-sport", title: "JLab Go Air Sport True Wireless Earbuds", store: "Walmart", category: "Audio", price: 9.88, was: 31.99, url: "https://www.walmart.com/search?q=JLab+Go+Air+Sport+Earbuds", checked: CHECKED, source: "Popular Science Walmart roundup" },
@@ -47,7 +54,7 @@ export const deals = [
   { id: "hyperx-cloud-iii", title: "HyperX Cloud III Wired Gaming Headset", store: "Walmart", category: "Audio", price: 57.99, was: 99.99, url: "https://www.walmart.com/search?q=HyperX+Cloud+III+Gaming+Headset", checked: CHECKED, source: "Popular Science Walmart roundup" },
 
   // ---- Computers ----
-  { id: "hp-omnibook-5", title: "HP OmniBook 5 14\" OLED Touchscreen Laptop", store: "Best Buy", category: "Computers", price: 449.99, was: 799.99, url: "https://www.bestbuy.com/site/searchpage.jsp?st=HP+OmniBook+5+14+OLED", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
+  { id: "hp-omnibook-5", title: "HP OmniBook 5 14\" OLED Touchscreen Laptop", store: "Best Buy", category: "Computers", price: 449.99, was: 799.99, url: "https://www.bestbuy.com/site/searchpage.jsp?st=HP+OmniBook+5+14+OLED", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov", ends: "2026-11-28" },
   { id: "dell-156-touch", title: "Dell 15.6\" Touchscreen Laptop (Core i5-1334U, 8GB, 512GB SSD)", store: "Walmart", category: "Computers", price: 429, was: 849.99, url: "https://www.walmart.com/search?q=Dell+15.6+Touchscreen+Laptop+i5-1334U", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "acer-chromebook-plus-514", title: "Acer Chromebook Plus 514 (Core 3 N355, 8GB, 512GB SSD)", store: "Walmart", category: "Computers", price: 319, was: 599.99, url: "https://www.walmart.com/search?q=Acer+Chromebook+Plus+514", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "msi-cyborg-156", title: "MSI Cyborg 15.6\" 144Hz Gaming Laptop (RTX 5050, 16GB)", store: "Walmart", category: "Computers", price: 799, was: 1299, url: "https://www.walmart.com/search?q=MSI+Cyborg+15.6+Gaming+Laptop+RTX+5050", checked: CHECKED, source: "Popular Science Walmart roundup" },
@@ -65,11 +72,16 @@ export const deals = [
   { id: "asus-tuf-monitor", title: "ASUS TUF Gaming 27\" QHD 210Hz Monitor (VG27AQ5AZ)", store: "Walmart", category: "Computers", price: 129, was: 199, url: "https://www.walmart.com/search?q=ASUS+TUF+Gaming+27+QHD+210Hz+Monitor", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "logitech-gpro-mouse", title: "Logitech G Pro X Superlight 2 SE Gaming Mouse", store: "Walmart", category: "Computers", price: 69, was: 139.99, url: "https://www.walmart.com/search?q=Logitech+G+Pro+X+Superlight+2+SE", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "corsair-k65-plus", title: "Corsair K65 Plus Wireless 75% Mechanical Keyboard", store: "Walmart", category: "Computers", price: 79, was: 159.99, url: "https://www.walmart.com/search?q=Corsair+K65+Plus+Wireless+Keyboard", checked: CHECKED, source: "Popular Science Walmart roundup" },
+  { id: "msi-vector-16", title: "MSI Vector 16 HX AI Gaming Laptop (RTX 5070 Ti)", store: "Newegg", category: "Computers", price: 1599, was: 1999, url: "https://www.newegg.com/p/pl?d=MSI+Vector+16+HX+AI", checked: AFTERNOON, source: "Newegg Black Friday announcement (BusinessWire), 18 Nov", ends: "2026-11-28" },
+  { id: "intel-i9-14900k", title: "Intel Core i9-14900K Desktop Processor", store: "Newegg", category: "Computers", price: 389.99, was: 599, url: "https://www.newegg.com/p/pl?d=Intel+Core+i9-14900K", checked: AFTERNOON, source: "Newegg Black Friday announcement (BusinessWire), 18 Nov", cond: "Price needs promo code BFEF165.", ends: "2026-11-28" },
 
   // ---- Phones & tablets ----
+  { id: "pixel-11", title: "Google Pixel 11", store: "Amazon", category: "Phones & tablets", price: 692, was: 899, url: "https://www.amazon.com/s?k=Google+Pixel+11", checked: RECHECKED, source: "9to5Google Black Friday deals, 24 Nov" },
   { id: "galaxy-s26-fe", title: "Samsung Galaxy S26 FE", store: "Best Buy", category: "Phones & tablets", price: 499.99, was: 699.99, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Samsung+Galaxy+S26+FE", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
   { id: "ipad-air-m4-11", title: "Apple iPad Air 11\" M4 (128GB, Wi-Fi)", store: "Amazon", category: "Phones & tablets", price: 649, was: 749, url: "https://www.amazon.com/s?k=iPad+Air+11+M4+128GB", checked: CHECKED, source: "MacRumors Apple deals, 26 Nov", note: "Best price since Apple's summer price rises; Best Buy matching." },
-  { id: "ipad-a16", title: "Apple iPad (A16, 128GB, Wi-Fi)", store: "Amazon", category: "Phones & tablets", price: 399.99, was: 449.99, url: "https://www.amazon.com/s?k=iPad+A16+128GB+Wi-Fi", checked: CHECKED, source: "iddeya Black Friday guide (checked 25 Nov)" },
+  { id: "ipad-a16", title: "Apple iPad (A16, 128GB, Wi-Fi)", store: "Amazon", category: "Phones & tablets", price: 399.99, was: 449.99, url: "https://www.amazon.com/s?k=iPad+A16+128GB+Wi-Fi", checked: CHECKED, source: "iddeya Black Friday guide (checked 25 Nov)", note: "Target price from Target's Weekly Ad (TheStreet, 27 Nov).", alts: [
+    { store: "Target", price: 379.99, url: "https://www.target.com/s?searchTerm=iPad+A16+128GB" },
+  ] },
   { id: "ipad-mini-8", title: "Apple iPad mini 8", store: "Amazon", category: "Phones & tablets", price: 599, was: 699, url: "https://www.amazon.com/s?k=iPad+mini+8", checked: CHECKED, source: "MacRumors Apple deals, 26 Nov", note: "First major discount on this model." },
   { id: "kindle-paperwhite", title: "Amazon Kindle Paperwhite", store: "Target", category: "Phones & tablets", price: 129.99, was: 199.99, url: "https://www.target.com/s?searchTerm=Kindle+Paperwhite", checked: CHECKED, source: "Benzinga Black Friday roundup, 27 Nov" },
   { id: "kindle-colorsoft", title: "Amazon Kindle Colorsoft 16GB", store: "Amazon", category: "Phones & tablets", price: 169.99, was: 289.99, url: "https://www.amazon.com/s?k=Kindle+Colorsoft+16GB", checked: CHECKED, source: "iddeya Black Friday guide (checked 25 Nov)" },
@@ -87,6 +99,10 @@ export const deals = [
   { id: "watch-s12-46", title: "Apple Watch Series 12 46mm GPS", store: "Amazon", category: "Wearables", price: 349, was: 449, url: "https://www.amazon.com/s?k=Apple+Watch+Series+12+46mm+GPS", checked: CHECKED, source: "MacRumors Apple deals, 26 Nov" },
   { id: "watch-ultra-3", title: "Apple Watch Ultra 3", store: "Best Buy", category: "Wearables", price: 549, was: 799, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Apple+Watch+Ultra+3", checked: CHECKED, source: "MacRumors Apple deals, 26 Nov", note: "New all-time low on the previous-generation model." },
   { id: "watch-s11-42", title: "Apple Watch Series 11 42mm GPS", store: "Walmart", category: "Wearables", price: 299, was: 399, url: "https://www.walmart.com/search?q=Apple+Watch+Series+11+42mm+GPS", checked: CHECKED, source: "Popular Science Walmart roundup" },
+  { id: "pixel-watch-5-41", title: "Google Pixel Watch 5 41mm", store: "Amazon", category: "Wearables", price: 300, was: 400, url: "https://www.amazon.com/s?k=Google+Pixel+Watch+5+41mm", checked: RECHECKED, source: "9to5Google Black Friday deals, 24 Nov", note: "Lowest price ever (PCMag)." },
+  { id: "galaxy-watch-8-40", title: "Samsung Galaxy Watch 8 40mm", store: "Amazon", category: "Wearables", price: 199.99, was: 299.99, url: "https://www.amazon.com/s?k=Samsung+Galaxy+Watch+8+40mm", checked: RECHECKED, source: "SmartBodyTouch smartwatch deals (checked 26 Nov)" },
+  { id: "garmin-instinct-3", title: "Garmin Instinct 3 AMOLED 45mm", store: "Amazon", category: "Wearables", price: 249.99, was: 449.99, url: "https://www.amazon.com/s?k=Garmin+Instinct+3+AMOLED+45mm", checked: RECHECKED, source: "SmartBodyTouch smartwatch deals (checked 26 Nov)" },
+  { id: "fitbit-inspire-3", title: "Fitbit Inspire 3", store: "Amazon", category: "Wearables", price: 68.95, was: 99.95, url: "https://www.amazon.com/s?k=Fitbit+Inspire+3", checked: RECHECKED, source: "SmartBodyTouch smartwatch deals (checked 26 Nov)" },
 
   // ---- Gaming ----
   { id: "switch2-bundle", title: "Nintendo Switch 2 + Mario Kart World Bundle", store: "Walmart", category: "Gaming", price: 499, was: 549.99, url: "https://www.walmart.com/search?q=Nintendo+Switch+2+Mario+Kart+World+Bundle", checked: CHECKED, source: "2ndshift.gg gaming deals (updated 26 Nov)", ends: "2026-12-05", alts: [
@@ -132,6 +148,7 @@ export const deals = [
   { id: "ecobee-premium", title: "ecobee Smart Thermostat Premium", store: "Amazon", category: "Smart home", price: 209.99, was: 259.99, url: "https://www.amazon.com/s?k=ecobee+Smart+Thermostat+Premium", checked: CHECKED, source: "Home Automation Weekly (prices checked 24 Nov)", note: "Usual price is ecobee's list price." },
   { id: "wyze-cam-og", title: "Wyze Cam OG Indoor/Outdoor 1080p Camera", store: "Walmart", category: "Smart home", price: 10, was: 29.97, url: "https://www.walmart.com/search?q=Wyze+Cam+OG", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "govee-bulbs", title: "Govee Smart RGBWW A19 LED Bulbs (12-pack)", store: "Walmart", category: "Smart home", price: 59.97, was: 84.97, url: "https://www.walmart.com/search?q=Govee+Smart+RGBWW+A19+LED+Bulbs+12-pack", checked: CHECKED, source: "Popular Science Walmart roundup" },
+  { id: "ring-floodlight-plus", title: "Ring Floodlight Cam Plus Wired Outdoor Camera", store: "Home Depot", category: "Smart home", price: 89.99, was: 179.99, url: "https://www.homedepot.com/s/Ring%20Floodlight%20Cam%20Plus", checked: AFTERNOON, source: "House Cultures Home Depot Black Friday guide, 24 Nov", cond: "Limit of three per order.", ends: "2026-12-02" },
 
   // ---- Kitchen ----
   { id: "ninja-crispi-4qt", title: "Ninja Crispi 4-Quart Glass Air Fryer", store: "Walmart", category: "Kitchen", price: 89, was: 139, url: "https://www.walmart.com/search?q=Ninja+Crispi+4-Quart+Glass+Air+Fryer", checked: CHECKED, source: "Popular Science Walmart roundup" },
@@ -152,13 +169,14 @@ export const deals = [
   { id: "gourmia-air-fryer-oven", title: "Gourmia 14-Quart Air Fryer Oven with Rotisserie", store: "Walmart", category: "Kitchen", price: 55, was: 129, url: "https://www.walmart.com/search?q=Gourmia+14-Quart+Air+Fryer+Oven+Rotisserie", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "ninja-french-door", title: "Ninja French Door 8-in-1 Countertop Oven (FO100)", store: "Walmart", category: "Kitchen", price: 169, was: 225, url: "https://www.walmart.com/search?q=Ninja+French+Door+8-in-1+Countertop+Oven+FO100", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "members-mark-cookware", title: "Member's Mark 11-Piece Ceramic Cookware Set", store: "Sam's Club", category: "Kitchen", price: 179.98, was: 199, url: "https://www.samsclub.com/s?searchTerm=Members+Mark+11-Piece+Ceramic+Cookware+Set", checked: CHECKED, source: "Sam's Club Black Friday roundup (betatechnalogy)", cond: "Sam's Club membership required." },
+  { id: "ninja-creami", title: "Ninja CREAMi 7-in-1 Ice Cream Maker (NC301)", store: "Target", category: "Kitchen", price: 199.99, was: 229.99, url: "https://www.target.com/s?searchTerm=Ninja+CREAMi+7-in-1+NC301", checked: AFTERNOON, source: "Swikblog Target Black Friday roundup, 27 Nov", ends: "2026-11-29" },
 
   // ---- Home & appliances ----
   { id: "dyson-v8-cyclone", title: "Dyson V8 Cyclone Cordless Vacuum", store: "Sam's Club", category: "Home & appliances", price: 249, was: 399, url: "https://www.samsclub.com/s?searchTerm=Dyson+V8+Cyclone+Cordless+Vacuum", checked: CHECKED, source: "Sam's Club Black Friday roundup (betatechnalogy)", cond: "Sam's Club membership required." },
   { id: "dyson-v9-motorbar", title: "Dyson V9 Motorbar Cordless Vacuum", store: "Best Buy", category: "Home & appliances", price: 270, was: 600, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Dyson+V9+Motorbar", checked: CHECKED, source: "DealNews Best Buy roundup", note: "55% off; lowest price since launch (SSBCrack). Usual price is Dyson's list price." },
   { id: "dyson-ball-animal", title: "Dyson Ball Animal Origin Upright Vacuum", store: "Walmart", category: "Home & appliances", price: 219.99, was: 329.99, url: "https://www.walmart.com/search?q=Dyson+Ball+Animal+Origin+Vacuum", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "shark-powerdetect", title: "Shark PowerDetect Speed Cordless Stick Vacuum", store: "Best Buy", category: "Home & appliances", price: 199.99, was: 499.99, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Shark+PowerDetect+Speed+Vacuum", checked: CHECKED, source: "Sam's Club Black Friday roundup (betatechnalogy)" },
-  { id: "shark-navigator-robot", title: "Shark Navigator 2-in-1 Self-Emptying Robot Vacuum & Mop", store: "Best Buy", category: "Home & appliances", price: 200, was: 700, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Shark+Navigator+Robot+Vacuum+Mop", checked: CHECKED, source: "DealNews Best Buy roundup" },
+  { id: "shark-navigator-robot", title: "Shark Navigator 2-in-1 Self-Emptying Robot Vacuum & Mop", store: "Best Buy", category: "Home & appliances", price: 200, was: 700, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Shark+Navigator+Robot+Vacuum+Mop", checked: CHECKED, source: "DealNews Best Buy roundup", note: "Usual price is Best Buy's comparable value; it sold for $249.99 in mid-November." },
   { id: "shark-powerpro", title: "Shark PowerPro Cordless Stick Vacuum", store: "Home Depot", category: "Home & appliances", price: 179, was: 329, url: "https://www.homedepot.com/s/Shark%20PowerPro%20Cordless%20Stick%20Vacuum", checked: CHECKED, source: "DealNews" },
   { id: "tineco-t1", title: "Tineco T1 Cordless Stick Vacuum", store: "Best Buy", category: "Home & appliances", price: 99.99, was: 140, url: "https://www.bestbuy.com/site/searchpage.jsp?st=Tineco+T1+Cordless+Stick+Vacuum", checked: CHECKED, source: "Sam's Club Black Friday roundup (betatechnalogy)", note: "Usual price is the regular price the roundup states." },
   { id: "bissell-crosswave", title: "BISSELL CrossWave Hard Floor Expert Wet/Dry Vacuum", store: "Walmart", category: "Home & appliances", price: 98.87, was: 209.99, url: "https://www.walmart.com/search?q=BISSELL+CrossWave+Hard+Floor+Expert", checked: CHECKED, source: "Popular Science Walmart roundup" },
@@ -171,6 +189,8 @@ export const deals = [
   { id: "cozy-haven-throw", title: "Cozy Haven Lush Plush Throw (50 × 72 in)", store: "Walmart", category: "Home & appliances", price: 15, was: 75, url: "https://www.walmart.com/search?q=Cozy+Haven+Lush+Plush+Throw", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "ugg-nita-throw", title: "Ugg Nita Throw Blanket", store: "Amazon", category: "Home & appliances", price: 48, was: 72, url: "https://www.amazon.com/s?k=Ugg+Nita+Throw+Blanket", checked: CHECKED, source: "SSBCrack News Amazon roundup" },
   { id: "greenworks-saw", title: "Greenworks Pro 24V Brushless Circular Saw Kit", store: "Walmart", category: "Home & appliances", price: 129, was: 217.44, url: "https://www.walmart.com/search?q=Greenworks+Pro+24V+Circular+Saw+Kit", checked: CHECKED, source: "Popular Science Walmart roundup" },
+  { id: "threshold-throw", title: "Threshold Faux Fur Throw Blanket (50 × 60 in)", store: "Target", category: "Home & appliances", price: 17.5, was: 35, url: "https://www.target.com/s?searchTerm=Threshold+Faux+Fur+Throw+Blanket", checked: AFTERNOON, source: "Swikblog Target Black Friday roundup, 27 Nov", ends: "2026-11-29" },
+  { id: "samsung-bespoke-fridge", title: "Samsung Bespoke 36\" 29 cu ft French-Door Refrigerator with Sphere Ice", store: "Home Depot", category: "Home & appliances", price: 1899, was: 3199, url: "https://www.homedepot.com/s/Samsung%20Bespoke%2029%20cu%20ft%20French-Door%20Refrigerator", checked: AFTERNOON, source: "House Cultures Home Depot Black Friday guide, 24 Nov", note: "Final price may appear in the cart.", ends: "2026-12-02" },
 
   // ---- Toys & games ----
   { id: "lego-jango-starship", title: "LEGO Star Wars Jango Fett's Starship (75433)", store: "Walmart", category: "Toys & games", price: 35, was: 69.99, url: "https://www.walmart.com/search?q=LEGO+Star+Wars+Jango+Fett+Starship+75433", checked: CHECKED, source: "DealNews LEGO roundup", note: "Best-ever price; $21 cheaper than Amazon." },
@@ -187,7 +207,9 @@ export const deals = [
   { id: "lego-duplo-train", title: "LEGO DUPLO My First Animal Train (10412)", store: "Walmart", category: "Toys & games", price: 10, was: 19.99, url: "https://www.walmart.com/search?q=LEGO+DUPLO+My+First+Animal+Train+10412", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "lego-poinsettia", title: "LEGO Icons Poinsettia (10370)", store: "Walmart", category: "Toys & games", price: 28, was: 49.99, url: "https://www.walmart.com/search?q=LEGO+Icons+Poinsettia+10370", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "lego-hogwarts-book-nook", title: "LEGO Harry Potter Hogwarts Express Book Nook", store: "Walmart", category: "Toys & games", price: 50, was: 79.95, url: "https://www.walmart.com/search?q=LEGO+Harry+Potter+Hogwarts+Express+Book+Nook", checked: CHECKED, source: "Popular Science Walmart roundup" },
-  { id: "lego-volvo-loader", title: "LEGO Technic Volvo L120 Electric Wheel Loader", store: "LEGO", category: "Toys & games", price: 84, was: 120, url: "https://www.lego.com/en-us/search?q=Volvo+L120+Electric+Wheel+Loader", checked: CHECKED, source: "DealNews LEGO roundup", note: "Set is retiring soon." },
+  { id: "lego-volvo-loader", title: "LEGO Technic Volvo L120 Electric Wheel Loader (42209)", store: "LEGO", category: "Toys & games", price: 71.99, was: 119.99, url: "https://www.lego.com/en-us/product/volvo-l120-electric-wheel-loader-42209", checked: AFTERNOON, source: "LEGO.com sale page, read 27 Nov", note: "Set is retiring soon." },
+  { id: "lego-williams-fw14b", title: "LEGO Icons Williams Racing FW14B & Nigel Mansell (10353)", store: "LEGO", category: "Toys & games", price: 47.99, was: 79.99, url: "https://www.lego.com/en-us/product/williams-racing-fw14b-nigel-mansell-10353", checked: AFTERNOON, source: "LEGO.com sale page, read 27 Nov", note: "Set is retiring soon." },
+  { id: "lego-flower-arrangement", title: "LEGO Icons Flower Arrangement (10345)", store: "LEGO", category: "Toys & games", price: 76.99, was: 109.99, url: "https://www.lego.com/en-us/product/flower-arrangement-10345", checked: AFTERNOON, source: "LEGO.com sale page, read 27 Nov", note: "Set is retiring soon." },
   { id: "magna-tiles", title: "Magna-Tiles Combo 46-Piece Set", store: "Walmart", category: "Toys & games", price: 20, was: 39.97, url: "https://www.walmart.com/search?q=Magna-Tiles+Combo+46-Piece+Set", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "jenga-classic", title: "Hasbro Jenga Classic", store: "Walmart", category: "Toys & games", price: 5, was: 14.99, url: "https://www.walmart.com/search?q=Hasbro+Jenga+Classic", checked: CHECKED, source: "Popular Science Walmart roundup" },
   { id: "hot-wheels-track", title: "Hot Wheels Action Loop Cyclone Challenge Track Set", store: "Walmart", category: "Toys & games", price: 20, was: 39.99, url: "https://www.walmart.com/search?q=Hot+Wheels+Action+Loop+Cyclone+Challenge", checked: CHECKED, source: "Popular Science Walmart roundup" },
@@ -213,7 +235,8 @@ export const deals = [
 ];
 
 // Store-wide codes read on 27 Nov 2026 (no single product price — shown as a codes strip).
+// Like the deals, each carries when it was read and where, so the strip is checkable too.
 export const codes = [
-  { store: "August", offer: "50% off sitewide (smart locks)", code: "BFCM50", source: "Saving Arena smart-home roundup" },
-  { store: "Madewell", offer: "40% off", code: "LETSGO", source: "That Shopping Chick Black Friday roundup (researched 26 Nov)" },
+  { store: "August", offer: "50% off sitewide (smart locks)", code: "BFCM50", checked: CHECKED, source: "Saving Arena smart-home roundup" },
+  { store: "Madewell", offer: "40% off", code: "LETSGO", checked: CHECKED, source: "That Shopping Chick Black Friday roundup (researched 26 Nov)" },
 ];

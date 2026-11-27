@@ -80,6 +80,19 @@ export function apply(deals, state) {
   return deals.filter((d) => matches(d, state)).sort((a, b) => compare(a, b, state.sort));
 }
 
+// True when the shopper has narrowed the board (search or any filter; sort alone does not
+// count). The board hides its Top 5 hero then — the hero is for browsing, not for searching.
+export function isFiltered(state) {
+  return (
+    state.q.trim() !== "" ||
+    state.category !== "all" ||
+    state.store !== "all" ||
+    state.price !== "all" ||
+    state.discount !== "all" ||
+    state.band !== "all"
+  );
+}
+
 export function counts(deals) {
   const stores = new Set(deals.map((d) => d.store));
   const categories = new Set(deals.map((d) => d.category));

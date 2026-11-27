@@ -2,7 +2,7 @@
 // in markup. Prices are formatted here; discounts and verdicts come from verdict.js.
 
 import { percentOff, saved, verdict, TYPICAL } from "./verdict.js";
-import { DISCOUNT_BANDS, PRICE_BANDS, SORTS } from "./filters.js";
+import { DISCOUNT_BANDS, PRICE_BANDS, SORTS, isFiltered } from "./filters.js";
 
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 export const usd = (n) => `$${n.toLocaleString("en-US", { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 })}`;
@@ -10,6 +10,8 @@ export const dayTime = (iso) =>
   new Date(iso).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" }) + " UTC";
 export const dayOnly = (iso) =>
   new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" });
+export const checkedDay = (iso) =>
+  new Date(iso).toLocaleDateString("en-US", { dateStyle: "medium", timeZone: "UTC" });
 
 const BAND_CLASS = {
   "Real deal": "v-real",
@@ -25,6 +27,16 @@ function badge(deal) {
 
 function altsLine(deal) {
   if (!deal.alts?.length) return "";
+  // When another store is cheaper, say so plainly — a neutral "also at" would let a
+  // shopper act on the dearer price without noticing. Ties and dearer alts stay neutral;
+  // the board never claims "lowest overall", only what its own checked prices show.
+  const cheaper = deal.alts.filter((a) => a.price < deal.price).sort((a, b) => a.price - b.price);
+  if (cheaper.length) {
+    const lead = cheaper[0];
+    const rest = deal.alts.filter((a) => a !== lead).map((a) => `${esc(a.store)} ${usd(a.price)}`);
+    const tail = rest.length ? ` · also ${rest.join(" · ")}` : "";
+    return `<p class="alts">Cheaper at ${esc(lead.store)} ${usd(lead.price)}${tail}</p>`;
+  }
   const parts = deal.alts.map((a) => `${esc(a.store)} ${usd(a.price)}`).join(" · ");
   return `<p class="alts">Also at ${parts}</p>`;
 }
@@ -37,11 +49,25 @@ export function card(deal) {
   <p class="store">${esc(deal.store)} · ${esc(deal.category)}</p>
   <p class="price">${usd(deal.price)} <s>${usd(deal.was)}</s> <span class="save">save ${usd(saved(deal))}</span></p>
   ${altsLine(deal)}
+  ${deal.note ? `<p class="note">${esc(deal.note)}</p>` : ""}
   <p class="meta">Checked ${dayTime(deal.checked)}<br>Read in ${esc(deal.source)}</p>
   ${deal.cond ? `<p class="cond">${esc(deal.cond)}</p>` : ""}
   ${deal.ends ? `<p class="ends">Ends ${dayOnly(deal.ends)}</p>` : ""}
   <p class="go"><a href="${esc(deal.url)}" rel="noopener" target="_blank">See it at ${esc(deal.store)} →</a></p>
 </article>`;
+}
+
+// One short, truthful flag for the small hero cards, derived from the deal's own data:
+// the full note is on the grid card and the deal page; the hero only has room for one
+// line, so it carries the most useful fact the deal has — price-history evidence first,
+// then the "was" caveat, then the sale end date, then when the price was checked.
+// Every hero card gets exactly one line, so the row height never changes.
+function heroFlag(deal) {
+  const v = verdict(deal);
+  if (v.lowest) return `<p class="flag">Lowest-ever price</p>`;
+  if (/list price|comparable value|regular price/i.test(deal.note ?? "")) return `<p class="flag warn">“Was” = list/comparison price</p>`;
+  if (deal.ends) return `<p class="flag warn">Ends ${dayOnly(deal.ends)}</p>`;
+  return `<p class="flag quiet">Checked ${checkedDay(deal.checked)}</p>`;
 }
 
 function heroCard(deal, rank) {
@@ -52,6 +78,7 @@ function heroCard(deal, rank) {
   <h3><a href="#/deal/${encodeURIComponent(deal.id)}">${esc(deal.title)}</a></h3>
   <p class="price">${usd(deal.price)} <s>${usd(deal.was)}</s> <span class="off">−${v.off}%</span></p>
   <p class="store">${esc(deal.store)} · save ${usd(saved(deal))}</p>
+  ${heroFlag(deal)}
 </article>`;
 }
 
@@ -88,14 +115,14 @@ export function board({ deals, shown, state, tally, top, codes }) {
   return `<section class="masthead">
   <h1>DoorBuster Board</h1>
   <p class="tagline">Real Black Friday deals, read and checked today — with a verdict on whether each one is really a deal.</p>
-  <p class="tally"><strong>${tally.total} deals</strong> · <strong>${tally.stores} stores</strong> · <strong>${tally.categories} categories</strong> · <strong>${tally.realDeals} rated “Real deal”</strong> · <strong>${tally.crossStore} priced at 2+ stores</strong></p>
+  <p class="tally"><strong>${tally.total} deals</strong> · <strong>${tally.stores} stores</strong> · <strong>${tally.categories} categories</strong> · <strong>${tally.realDeals} rated “Real deal”</strong> · <strong>${tally.crossStore} priced at 2+ stores</strong> · <strong>${codes.length} store-wide codes</strong></p>
   <p class="checked-note">Every price checked Fri 27 Nov 2026 (UTC), read in the source named on its card. Discounts are computed from the two prices, never typed in.</p>
 </section>
 
-<section class="hero">
-  <h2>Top 5 real deals</h2>
+${isFiltered(state) ? "" : `<section class="hero" id="hero">
+  <h2>Top 5 real deals <span class="legend">— verdicts compare each discount with its category's typical Black Friday cut; the full rule is at the foot of the board</span></h2>
   <div class="hero-grid">${top.map((d, i) => heroCard(d, i + 1)).join("")}</div>
-</section>
+</section>`}
 
 <section class="filters" aria-label="Filter deals">
   <div class="frow search-row">
@@ -118,7 +145,7 @@ export function board({ deals, shown, state, tally, top, codes }) {
 
 <section class="codes">
   <h2>Store-wide codes</h2>
-  <ul>${codes.map((c) => `<li><strong>${esc(c.store)}</strong> — ${esc(c.offer)} with code <code>${esc(c.code)}</code> <span class="meta">(read in ${esc(c.source)})</span></li>`).join("")}</ul>
+  <ul>${codes.map((c) => `<li><strong>${esc(c.store)}</strong> — ${esc(c.offer)} with code <code>${esc(c.code)}</code> <span class="meta">(read in ${esc(c.source)}${c.checked ? ` · checked ${checkedDay(c.checked)}` : ""})</span></li>`).join("")}</ul>
 </section>
 
 <section class="rule">
@@ -132,30 +159,49 @@ export function board({ deals, shown, state, tally, top, codes }) {
 </section>`;
 }
 
-export function dealPage(deal) {
+export function dealPage(deal, allDeals = []) {
   const v = verdict(deal);
+  const more = allDeals
+    .filter((d) => d.category === deal.category && d.id !== deal.id)
+    .sort((a, b) => percentOff(b) - percentOff(a))
+    .slice(0, 3);
+  // Category context for deals priced at one store only (the cross-store table fills
+  // this column otherwise): where this discount ranks among its category, computed
+  // from the board's own checked deals.
+  const inCategory = allDeals
+    .filter((d) => d.category === deal.category)
+    .sort((a, b) => percentOff(b) - percentOff(a));
+  const categoryRank = inCategory.findIndex((d) => d.id === deal.id) + 1;
+  const categoryCheapest = Math.min(...inCategory.map((d) => d.price));
+  const lowest = Math.min(deal.price, ...(deal.alts ?? []).map((a) => a.price));
+  const lowMark = (price) => (price === lowest ? ` <strong>lowest</strong>` : "");
   const alts = (deal.alts ?? [])
     .map(
-      (a) => `<tr><td>${esc(a.store)}</td><td>${usd(a.price)}</td><td><a href="${esc(a.url)}" rel="noopener" target="_blank">See it →</a></td></tr>`,
+      (a) => `<tr><td>${esc(a.store)}</td><td>${usd(a.price)}${lowMark(a.price)}</td><td><a href="${esc(a.url)}" rel="noopener" target="_blank">See it →</a></td></tr>`,
     )
     .join("");
   return `<p><a href="#/">← All deals</a></p>
 <h1>${esc(deal.title)}</h1>
 <p class="price big">${usd(deal.price)} <s>${usd(deal.was)}</s> <span class="off">−${v.off}%</span> ${badge(deal)}</p>
+<div class="deal-cols">
 <dl class="facts">
   <dt>Store</dt><dd>${esc(deal.store)}</dd>
   <dt>Category</dt><dd>${esc(deal.category)}</dd>
   <dt>You save</dt><dd>${usd(saved(deal))} off the usual price</dd>
   <dt>Verdict maths</dt><dd>${esc(v.why)}</dd>
-  ${deal.note ? `<dt>Price history</dt><dd>${esc(deal.note)}</dd>` : ""}
+  ${deal.note ? `<dt>Price note</dt><dd>${esc(deal.note)}</dd>` : ""}
   ${deal.cond ? `<dt>Condition</dt><dd>${esc(deal.cond)}</dd>` : ""}
   ${deal.ends ? `<dt>Sale ends</dt><dd>${dayOnly(deal.ends)}</dd>` : ""}
   <dt>Price checked</dt><dd>${dayTime(deal.checked)}</dd>
   <dt>Read in</dt><dd>${esc(deal.source)}</dd>
 </dl>
-${alts ? `<h2>Same product, other stores</h2><table class="alts-table"><thead><tr><th>Store</th><th>Price</th><th></th></tr></thead><tbody><tr><td>${esc(deal.store)} (this deal)</td><td>${usd(deal.price)}</td><td><a href="${esc(deal.url)}" rel="noopener" target="_blank">See it →</a></td></tr>${alts}</tbody></table>` : ""}
+<div class="deal-side">
+${alts ? `<h2>Same product, other stores</h2><table class="alts-table"><thead><tr><th>Store</th><th>Price</th><th></th></tr></thead><tbody><tr><td>${esc(deal.store)} (this deal)</td><td>${usd(deal.price)}${lowMark(deal.price)}</td><td><a href="${esc(deal.url)}" rel="noopener" target="_blank">See it →</a></td></tr>${alts}</tbody></table>` : `<h2>${esc(deal.category)} on this board</h2><p class="meta">${inCategory.length} ${esc(deal.category)} deals checked today · this is #${categoryRank} by discount · cheapest ${esc(deal.category)} deal ${usd(categoryCheapest)}</p>`}
 <p class="go big"><a href="${esc(deal.url)}" rel="noopener" target="_blank">See it at ${esc(deal.store)} →</a></p>
-<p class="meta">Prices move fast on Black Friday — the store page has the final word. This board shows the price as read at the check time above.</p>`;
+<p class="meta">Prices move fast on Black Friday — the store page has the final word. This board shows the price as read at the check time above.</p>
+</div>
+</div>
+${more.length ? `<h2>More ${esc(deal.category)} deals</h2><section class="grid more-grid">${more.map(card).join("")}</section>` : ""}`;
 }
 
 export function missingPage() {
